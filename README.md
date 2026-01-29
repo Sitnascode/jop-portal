@@ -164,6 +164,21 @@ job-portal/
 - `GET /applications` - Get user applications
 - `GET /jobs/:id/applications` - Get job applications (employers only)
 
+## Deployment
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+### Quick Deploy Options:
+
+- **Frontend:** Vercel, Netlify
+- **Backend:** Railway, Render, Heroku
+- **Database:** SQLite (development) → PostgreSQL (production)
+
+### Environment Variables Required:
+
+- **Backend:** `JWT_SECRET`, `FRONTEND_URL`, `NODE_ENV`
+- **Frontend:** `VITE_API_URL`
+
 ## Contributing
 
 1. Fork the repository
