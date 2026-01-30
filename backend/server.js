@@ -9,6 +9,14 @@ import profileRoutes from "./src/routes/profiles.js";
 import jobRoutes from "./src/routes/jobs.js";
 import applicationRoutes from "./src/routes/applications.js";
 
+// Verify routes are loaded
+console.log('Route imports:', {
+  authRoutes: typeof authRoutes,
+  profileRoutes: typeof profileRoutes,
+  jobRoutes: typeof jobRoutes,
+  applicationRoutes: typeof applicationRoutes
+});
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,28 +24,41 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// CORS configuration
-const allowedOrigins = [
-  "http://localhost:5173", // Development
-  "http://localhost:3000", // Alternative dev port
-  process.env.FRONTEND_URL, // Production frontend
-].filter(Boolean); // Remove undefined values
-
+// CORS configuration - Allow multiple origins flexibly
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Allow requests with no origin (like mobile apps, curl, or same-origin)
     if (!origin) return callback(null, true);
-
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      console.log(`CORS blocked origin: ${origin}`);
-      console.log(`Allowed origins: ${allowedOrigins.join(", ")}`);
-      callback(new Error("Not allowed by CORS"));
+    
+    // Allow localhost on any port for development
+    if (origin.match(/^https?:\/\/localhost(:\d+)?$/)) {
+      return callback(null, true);
     }
+    
+    // Allow Vercel deployments
+    if (origin.match(/^https:\/\/.*\.vercel\.app$/)) {
+      return callback(null, true);
+    }
+    
+    // Allow Railway deployments
+    if (origin.match(/^https:\/\/.*\.railway\.app$/)) {
+      return callback(null, true);
+    }
+    
+    // Allow specific production frontend
+    if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) {
+      return callback(null, true);
+    }
+    
+    console.log(`CORS blocked origin: ${origin}`);
+    console.log(`FRONTEND_URL env: ${process.env.FRONTEND_URL || 'not set'}`);
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
   optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
 };
 
 app.use(cors(corsOptions));
@@ -61,11 +82,29 @@ app.get("/", (req, res) => {
   });
 });
 
-// Routes
-app.use("/auth", authRoutes);
-app.use("/profiles", profileRoutes);
-app.use("/jobs", jobRoutes);
-app.use("/applications", applicationRoutes);
+// Routes with debugging
+console.log('Loading routes...');
+app.use("/auth", (req, res, next) => {
+  console.log(`Auth route: ${req.method} ${req.path}`);
+  next();
+}, authRoutes);
+
+app.use("/profiles", (req, res, next) => {
+  console.log(`Profile route: ${req.method} ${req.path}`);
+  next();
+}, profileRoutes);
+
+app.use("/jobs", (req, res, next) => {
+  console.log(`Job route: ${req.method} ${req.path}`);
+  next();
+}, jobRoutes);
+
+app.use("/applications", (req, res, next) => {
+  console.log(`Application route: ${req.method} ${req.path}`);
+  next();
+}, applicationRoutes);
+
+console.log('Routes loaded successfully');
 
 // 404 handler
 app.use("*", (req, res) => {
@@ -92,8 +131,10 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`API server listening on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
-  console.log(`CORS allowed origins: ${allowedOrigins.join(", ")}`);
-  console.log(
-    `Frontend URL from env: ${process.env.FRONTEND_URL || "not set"}`,
-  );
+  console.log(`Frontend URL from env: ${process.env.FRONTEND_URL || 'not set'}`);
+  console.log('CORS will allow:');
+  console.log('- localhost on any port');
+  console.log('- *.vercel.app domains');
+  console.log('- *.railway.app domains');
+  console.log('- FRONTEND_URL if set');
 });

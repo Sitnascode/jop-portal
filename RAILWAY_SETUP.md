@@ -14,15 +14,15 @@
 In your Railway project dashboard, go to **Variables** tab and add:
 
 ```
-NODE_ENV=production
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-FRONTEND_URL=https://your-frontend-domain.vercel.app
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+
 ```
 
 **Important:**
 
 - Replace `your-super-secret-jwt-key-change-this-in-production` with a strong secret key
-- Replace `your-frontend-domain.vercel.app` with your actual frontend URL
+- The `FRONTEND_URL` should match your actual Vercel deployment URL exactly
+- **For your current deployment, use:** `https://jop-portal.vercel.app`
 
 ### 3. Deploy Frontend to Vercel
 
