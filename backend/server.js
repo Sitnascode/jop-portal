@@ -17,8 +17,25 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 // CORS configuration
+const allowedOrigins = [
+  "http://localhost:5173", // Development
+  "http://localhost:3000", // Alternative dev port
+  process.env.FRONTEND_URL, // Production frontend
+].filter(Boolean); // Remove undefined values
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log(`CORS blocked origin: ${origin}`);
+      console.log(`Allowed origins: ${allowedOrigins.join(", ")}`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -75,7 +92,8 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`API server listening on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+  console.log(`CORS allowed origins: ${allowedOrigins.join(", ")}`);
   console.log(
-    `CORS origin: ${process.env.FRONTEND_URL || "http://localhost:5173"}`,
+    `Frontend URL from env: ${process.env.FRONTEND_URL || "not set"}`,
   );
 });
