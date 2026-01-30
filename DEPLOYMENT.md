@@ -245,8 +245,11 @@ All recommended platforms provide automatic SSL certificates:
 5. **Railway Deployment Issues:**
    - If you see "Script start.sh not found" error:
      - Make sure you're deploying from the ROOT directory (not backend folder)
-     - Ensure `package.json`, `Procfile`, and `start.sh` are in the root
+     - Ensure `package.json`, `Procfile` are in the root
      - Check that Railway detects the root package.json
+   - If you see "Cannot find package 'express'" error:
+     - This is fixed by having dependencies in root package.json
+     - Railway will install dependencies from root and run backend server
      - Verify the start command points to backend directory
 
 ### Support
