@@ -79,6 +79,22 @@ app.get("/", (req, res) => {
     message: "Job portal API running",
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || "development",
+    routes: {
+      auth: '/auth (POST /register, POST /login, GET /me)',
+      jobs: '/jobs (GET, POST)',
+      profiles: '/profiles',
+      applications: '/applications'
+    }
+  });
+});
+
+// Test endpoint to verify routes are working
+app.get('/test', (req, res) => {
+  res.json({
+    message: 'Test endpoint working',
+    timestamp: new Date().toISOString(),
+    method: req.method,
+    path: req.path
   });
 });
 
