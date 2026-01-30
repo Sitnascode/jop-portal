@@ -30,11 +30,12 @@ This guide covers multiple deployment options for the Job Portal application.
 1. **Connect to Railway:**
    - Go to [railway.app](https://railway.app)
    - Connect your GitHub repository
-   - Select the backend folder
+   - **Important:** Deploy from the ROOT directory (not backend folder)
 
 2. **Railway Configuration:**
-   - Railway will automatically detect the `railway.json` and `nixpacks.toml` files
-   - These files ensure proper Node.js setup and start command
+   - Railway will automatically detect the root `package.json`
+   - The `Procfile` and `start.sh` ensure proper startup
+   - Railway will run `cd backend && npm start`
 
 3. **Set Environment Variables:**
 
@@ -45,9 +46,9 @@ This guide covers multiple deployment options for the Job Portal application.
    ```
 
 4. **Railway will automatically:**
-   - Detect Node.js
-   - Install dependencies
-   - Start the server with `npm start`
+   - Detect Node.js from root package.json
+   - Install backend dependencies
+   - Start the server from the backend directory
 
 ### Option 2: Netlify + Render
 
@@ -243,10 +244,10 @@ All recommended platforms provide automatic SSL certificates:
 
 5. **Railway Deployment Issues:**
    - If you see "Script start.sh not found" error:
-     - Ensure `railway.json` and `nixpacks.toml` are in the backend folder
-     - Verify `package.json` has a `start` script
-     - Check that Railway is pointing to the correct folder (backend)
-     - Make sure you're deploying from the backend directory, not root
+     - Make sure you're deploying from the ROOT directory (not backend folder)
+     - Ensure `package.json`, `Procfile`, and `start.sh` are in the root
+     - Check that Railway detects the root package.json
+     - Verify the start command points to backend directory
 
 ### Support
 
