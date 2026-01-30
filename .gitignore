@@ -73,8 +73,3 @@ temp/
 # Uploads directory (if it contains user uploads)
 backend/uploads/*
 !backend/uploads/.gitkeep
-
-# Keep deployment files
-!Procfile
-!start.sh
-!install.sh
