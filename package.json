@@ -2,13 +2,25 @@
   "name": "job-portal",
   "version": "1.0.0",
   "description": "A modern job portal application",
+  "main": "backend/server.js",
+  "type": "module",
   "scripts": {
-    "start": "cd backend && npm start",
+    "start": "cd backend && node server.js",
+    "build": "echo 'No build step required'",
     "install-backend": "cd backend && npm install",
     "install-frontend": "cd frontend && npm install",
     "build-frontend": "cd frontend && npm run build",
     "dev-backend": "cd backend && npm run dev",
     "dev-frontend": "cd frontend && npm run dev"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^12.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0",
+    "express": "^4.19.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1"
   },
   "keywords": [
     "job-portal",
