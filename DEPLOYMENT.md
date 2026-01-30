@@ -32,7 +32,11 @@ This guide covers multiple deployment options for the Job Portal application.
    - Connect your GitHub repository
    - Select the backend folder
 
-2. **Set Environment Variables:**
+2. **Railway Configuration:**
+   - Railway will automatically detect the `railway.json` and `nixpacks.toml` files
+   - These files ensure proper Node.js setup and start command
+
+3. **Set Environment Variables:**
 
    ```
    NODE_ENV=production
@@ -40,10 +44,10 @@ This guide covers multiple deployment options for the Job Portal application.
    FRONTEND_URL=https://your-vercel-app.vercel.app
    ```
 
-3. **Railway will automatically:**
+4. **Railway will automatically:**
    - Detect Node.js
    - Install dependencies
-   - Start the server
+   - Start the server with `npm start`
 
 ### Option 2: Netlify + Render
 
@@ -236,6 +240,13 @@ All recommended platforms provide automatic SSL certificates:
 4. **Environment Variables:**
    - Ensure all required variables are set
    - Check variable names (VITE\_ prefix for frontend)
+
+5. **Railway Deployment Issues:**
+   - If you see "Script start.sh not found" error:
+     - Ensure `railway.json` and `nixpacks.toml` are in the backend folder
+     - Verify `package.json` has a `start` script
+     - Check that Railway is pointing to the correct folder (backend)
+     - Make sure you're deploying from the backend directory, not root
 
 ### Support
 

@@ -1,0 +1,16 @@
+{
+  "name": "JobPortal - Find Your Dream Job",
+  "short_name": "JobPortal",
+  "description": "Modern job portal connecting job seekers with employers",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
