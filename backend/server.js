@@ -10,11 +10,11 @@ import jobRoutes from "./src/routes/jobs.js";
 import applicationRoutes from "./src/routes/applications.js";
 
 // Verify routes are loaded
-console.log('Route imports:', {
+console.log("Route imports:", {
   authRoutes: typeof authRoutes,
   profileRoutes: typeof profileRoutes,
   jobRoutes: typeof jobRoutes,
-  applicationRoutes: typeof applicationRoutes
+  applicationRoutes: typeof applicationRoutes,
 });
 
 dotenv.config();
@@ -29,36 +29,35 @@ const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, curl, or same-origin)
     if (!origin) return callback(null, true);
-    
+
     // Allow localhost on any port for development
     if (origin.match(/^https?:\/\/localhost(:\d+)?$/)) {
       return callback(null, true);
     }
-    
+
     // Allow Vercel deployments
     if (origin.match(/^https:\/\/.*\.vercel\.app$/)) {
       return callback(null, true);
     }
-    
+
     // Allow Railway deployments
     if (origin.match(/^https:\/\/.*\.railway\.app$/)) {
       return callback(null, true);
     }
-    
+
     // Allow specific production frontend
     if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) {
       return callback(null, true);
     }
-    
+
     console.log(`CORS blocked origin: ${origin}`);
-    console.log(`FRONTEND_URL env: ${process.env.FRONTEND_URL || 'not set'}`);
-    callback(new Error('Not allowed by CORS'));
+    console.log(`FRONTEND_URL env: ${process.env.FRONTEND_URL || "not set"}`);
+    callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
   optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-};
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 };
 
 app.use(cors(corsOptions));
@@ -80,47 +79,63 @@ app.get("/", (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || "development",
     routes: {
-      auth: '/auth (POST /register, POST /login, GET /me)',
-      jobs: '/jobs (GET, POST)',
-      profiles: '/profiles',
-      applications: '/applications'
-    }
+      auth: "/auth (POST /register, POST /login, GET /me)",
+      jobs: "/jobs (GET, POST)",
+      profiles: "/profiles",
+      applications: "/applications",
+    },
   });
 });
 
 // Test endpoint to verify routes are working
-app.get('/test', (req, res) => {
+app.get("/test", (req, res) => {
   res.json({
-    message: 'Test endpoint working',
+    message: "Test endpoint working",
     timestamp: new Date().toISOString(),
     method: req.method,
-    path: req.path
+    path: req.path,
   });
 });
 
 // Routes with debugging
-console.log('Loading routes...');
-app.use("/auth", (req, res, next) => {
-  console.log(`Auth route: ${req.method} ${req.path}`);
-  next();
-}, authRoutes);
+console.log("Loading routes...");
+app.use(
+  "/auth",
+  (req, res, next) => {
+    console.log(`Auth route: ${req.method} ${req.path}`);
+    next();
+  },
+  authRoutes,
+);
 
-app.use("/profiles", (req, res, next) => {
-  console.log(`Profile route: ${req.method} ${req.path}`);
-  next();
-}, profileRoutes);
+app.use(
+  "/profiles",
+  (req, res, next) => {
+    console.log(`Profile route: ${req.method} ${req.path}`);
+    next();
+  },
+  profileRoutes,
+);
 
-app.use("/jobs", (req, res, next) => {
-  console.log(`Job route: ${req.method} ${req.path}`);
-  next();
-}, jobRoutes);
+app.use(
+  "/jobs",
+  (req, res, next) => {
+    console.log(`Job route: ${req.method} ${req.path}`);
+    next();
+  },
+  jobRoutes,
+);
 
-app.use("/applications", (req, res, next) => {
-  console.log(`Application route: ${req.method} ${req.path}`);
-  next();
-}, applicationRoutes);
+app.use(
+  "/applications",
+  (req, res, next) => {
+    console.log(`Application route: ${req.method} ${req.path}`);
+    next();
+  },
+  applicationRoutes,
+);
 
-console.log('Routes loaded successfully');
+console.log("Routes loaded successfully");
 
 // 404 handler
 app.use("*", (req, res) => {
@@ -147,10 +162,12 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`API server listening on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
-  console.log(`Frontend URL from env: ${process.env.FRONTEND_URL || 'not set'}`);
-  console.log('CORS will allow:');
-  console.log('- localhost on any port');
-  console.log('- *.vercel.app domains');
-  console.log('- *.railway.app domains');
-  console.log('- FRONTEND_URL if set');
+  console.log(
+    `Frontend URL from env: ${process.env.FRONTEND_URL || "not set"}`,
+  );
+  console.log("CORS will allow:");
+  console.log("- localhost on any port");
+  console.log("- *.vercel.app domains");
+  console.log("- *.railway.app domains");
+  console.log("- FRONTEND_URL if set");
 });
